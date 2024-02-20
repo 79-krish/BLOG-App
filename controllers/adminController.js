@@ -83,15 +83,31 @@ const loadPostDashboard=async(req,res)=>{
 }
 const addpost=async(req,res)=>{
     try{
+        var image='';
+        if(req.body.image!==undefined){
+            image=req.body.image;
+        }
         const post =new Post({
-    title:req.body.title,
-    content:req.body.content,
+            title:req.body.title,
+            content:req.body.content,
+            image:image
 
 });
 const postData=await post.save();
 res.render("admin/postDashboard",{message:"post added sucessfully"});
     }catch(error){
         console.log(error.message);
+    }
+}
+const uploadPostImage=async(req,res)=>{
+    try{
+        var imagePath='/images';
+        imagePath=imagePath+'/'+req.file.filename;
+        
+        res.send({success:true,msg:'Post image upload successfullly',path:imagePath});
+
+    }catch(error){
+       res.send({success:false,msg:error.message});
     }
 }
 
@@ -103,5 +119,6 @@ module.exports={
     dashboard,
     loadPostDashboard,
     addpost,
-    securePassword
+    securePassword,
+    uploadPostImage
 }

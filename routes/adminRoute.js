@@ -44,4 +44,6 @@ admin_Route.post('/blog-setup',upload.single('blog_image'),adminController.blogS
 admin_Route.get('/dashboard',adminLoginAuth.isLogin,adminController.dashboard);
 admin_Route.get("/create-post",adminLoginAuth.isLogin,adminController.loadPostDashboard);
 admin_Route.post("/create-post",adminLoginAuth.isLogin,adminController.addpost);
+
+admin_Route.post("/upload-post-image",upload.single('image'),adminLoginAuth.isLogin,adminController.uploadPostImage);
 module.exports=admin_Route;

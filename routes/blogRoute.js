@@ -9,5 +9,6 @@ blog_route.use(express.static('public'));
 const blogController=require('../controllers/blogController');
 blog_route.get('/',blogController.loadBlog);
 blog_route.get("/post/:id",blogController.loadPost);
+blog_route.post("/add-comment",blogController.addcomment);
 
 module.exports=blog_route;
