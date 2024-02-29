@@ -28,4 +28,5 @@ user_Route.get("/forget-password",adminLoginAuth.isLogout,userController.forgetl
 user_Route.post('/forget-password',userController.forgetPasswordVerify);
 user_Route.get('/reset-password',adminLoginAuth.isLogout,userController.resetpasswordload);
 user_Route.post('/reset-password',userController.resetpassword)
+user_Route.get('/about-us',userController.AboutUs)
 module.exports=user_Route;

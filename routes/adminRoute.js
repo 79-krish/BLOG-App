@@ -46,4 +46,11 @@ admin_Route.get("/create-post",adminLoginAuth.isLogin,adminController.loadPostDa
 admin_Route.post("/create-post",adminLoginAuth.isLogin,adminController.addpost);
 
 admin_Route.post("/upload-post-image",upload.single('image'),adminLoginAuth.isLogin,adminController.uploadPostImage);
+admin_Route.post("/delete-post",adminLoginAuth.isLogin,adminController.deltePost)
+
+admin_Route.get("/edit-post/:id",adminLoginAuth.isLogin,adminController.loadEditPost);
+
+admin_Route.post('/update-post',adminLoginAuth.isLogin,adminController.updatePost)
+    
+
 module.exports=admin_Route;

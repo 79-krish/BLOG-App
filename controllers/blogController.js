@@ -1,6 +1,38 @@
 const Post=require("../models/postModel");
 const { ObjectId }=require("mongodb");
+const config=require('../config/config');
+const nodemailer=require('nodemailer');
 
+const sendCommentMail=async(name,email,post_id)=>{
+    try{
+       const transPorter= nodemailer.createTransport({
+            host:'smtp.gamil.com',
+            port:587,
+            secure:false,
+            requireTLS:true,
+            auth:{
+                user:config.emailUser,
+                pass:config.emailPassword
+            }
+        })
+        const mailoptions={
+            from:'BMS',
+            to:email,
+            subject:'New Reply',
+            html:'<P>'+name+'<a href="http://127.0.0.1:3000/post/"'+post_id+'>Read here your replies</a></P>'
+        }
+        transPorter.sendMail(mailoptions,function(error,info){
+            if(error){
+                console.log(error);
+            }
+            else{
+                console.log("Email has been send",info.response);
+            }
+        })
+    }catch(error){
+        console.log(error.message);
+    }
+}
 const loadBlog=async(req,res)=>{
     try{
         const posts=await Post.find({});
@@ -49,6 +81,8 @@ const doReplay=async(req,res)=>{
                "comments.$.replies":{_id:reply_id,name:req.body.name,reply:req.body.reply } 
             }
         })
+        sendCommentMail(req.body.name,req.body.comment_email,req.body.post_id);
+
         res.status(200).send({sucess:true,msg:"reply addad!"});
 
     }catch(error){
@@ -60,5 +94,6 @@ module.exports={
     loadPost,
     addcomment,
     doReplay,
+    sendCommentMail
 
 }

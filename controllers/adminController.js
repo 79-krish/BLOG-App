@@ -2,6 +2,7 @@ const BlogSetting=require("../models/blogSettingModel");
 const User=require("../models/UserModel");
 const Post=require("../models/postModel");
 const bcrypt=require("bcrypt");
+const { post } = require("../routes/adminRoute");
 
 const securePassword=async(password)=>{
  try{
@@ -68,7 +69,8 @@ const blogSetupSave=async(req,res)=> {
 }
 const dashboard=async(req,res)=>{
     try{
-        res.render("admin/dashboard");
+       const allposts=await Post.find({})
+        res.render("admin/dashboard",{posts:allposts});
     }catch(error){
         console.log(error.message);
     }
@@ -94,9 +96,10 @@ const addpost=async(req,res)=>{
 
 });
 const postData=await post.save();
-res.render("admin/postDashboard",{message:"post added sucessfully"});
+//res.render("admin/postDashboard",{message:"post added sucessfully"});
+res.send({success:true,msg:'Post added sucessfully',_id:postData._id });
     }catch(error){
-        console.log(error.message);
+        res.send({success:false,msg:error.message});
     }
 }
 const uploadPostImage=async(req,res)=>{
@@ -111,6 +114,38 @@ const uploadPostImage=async(req,res)=>{
     }
 }
 
+const deltePost=async(req,res)=>{
+            try{
+                await Post.deleteOne({_id:req.body.id});
+            }catch(error){
+                res.status(400).send({success:false,msg:'Post delted sucessfully'});
+            }
+}
+const loadEditPost=async(req,res)=>{
+    try{
+      var postData= await Post.findOne({_id:req.params.id});
+      res.render("admin/editPost",{post:postData});
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+const updatePost=async(req,res)=>{
+    try{
+       await Post.findByIdAndUpdate({_id:req.body.id},{
+        $set:{
+            title:req.body.title,
+            content:req.body.content,
+            image:req.body.image
+           }
+       });
+       
+        res.status(200).send({success:true,msg:'Post updated successfullly!'});
+    }catch(error){
+        res.status(400).send({success:false,msg:error.message});
+    }
+}
+
 
 module.exports={
     blogTwo,
@@ -120,5 +155,9 @@ module.exports={
     loadPostDashboard,
     addpost,
     securePassword,
-    uploadPostImage
+    uploadPostImage,
+    deltePost,
+    loadEditPost,
+    updatePost,
+  
 }

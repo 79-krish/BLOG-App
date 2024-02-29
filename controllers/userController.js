@@ -144,6 +144,13 @@ const resetpassword=async(req,res)=>{
         console.log(error.messsage);
     }
 }
+const AboutUs=async(req,res)=>{
+    try{
+        res.render("About");
+    }catch(error){
+        console.log(error.message);
+    }
+}
 module.exports={
     loadlogin,
     verifyLogin,
@@ -153,5 +160,6 @@ module.exports={
     forgetPasswordVerify,
     sendResetPassword,
     resetpasswordload,
-    resetpassword
+    resetpassword,
+    AboutUs
 }
